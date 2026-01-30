@@ -111,6 +111,13 @@ class VideoDiffusionInfer():
         if hasattr(self, 'debug'):
             self.sampler.debug = self.debug
 
+    def set_progress_bar_config(self, disable: bool = False):
+        """Set progress bar configuration for the sampler."""
+        if disable:
+            self.sampler.disable_progress_bar()
+        else:
+            self.sampler.enable_progress_bar()
+
     # -------------------------------- Helper ------------------------------- #
 
     @torch.no_grad()
