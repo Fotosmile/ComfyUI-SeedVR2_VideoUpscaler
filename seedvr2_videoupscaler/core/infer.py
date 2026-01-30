@@ -326,6 +326,7 @@ class VideoDiffusionInfer():
         texts_pos: Union[List[str], List[Tensor], List[Tuple[Tensor]]],
         texts_neg: Union[List[str], List[Tensor], List[Tuple[Tensor]]],
         cfg_scale: Optional[float] = None,
+        disable_cache: bool = True,
     ) -> List[Tensor]:
         assert len(noises) == len(conditions) == len(texts_pos) == len(texts_neg)
         batch_size = len(noises)
@@ -371,6 +372,7 @@ class VideoDiffusionInfer():
                     vid_shape=latents_shapes,
                     txt_shape=text_pos_shapes,
                     timestep=args.t.repeat(batch_size),
+                    disable_cache=disable_cache,
                 ).vid_sample,
                 neg=lambda: self.dit(
                     vid=torch.cat([args.x_t, latents_cond], dim=-1),
@@ -378,6 +380,7 @@ class VideoDiffusionInfer():
                     vid_shape=latents_shapes,
                     txt_shape=text_neg_shapes,
                     timestep=args.t.repeat(batch_size),
+                    disable_cache=disable_cache,
                 ).vid_sample,
                 scale=(
                     cfg_scale
